@@ -1,1 +1,4 @@
-web: gunicorn app:app
+from blogger import app
+
+if __name__ == '__main__':
+    app.run(debug=True)
