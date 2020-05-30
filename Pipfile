@@ -11,6 +11,7 @@ Flask_WTF = "*"
 flask-sqlalchemy = "*"
 gunicorn = "*"
 psycopg2 = "*"
+email_validator = "*"
 
 [requires]
 python_version = "3.7"
