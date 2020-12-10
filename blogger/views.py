@@ -66,7 +66,11 @@ def update_post(pid, post_owner):
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     signupform = SignUpForm(request.form)
-    if request.method == 'POST':
+    if request.method == 'POST':    
+        em = signupform.email.data
+        log = User.query.filter_by(email=em).first()
+        if log is not None:
+            return redirect(url_for('signup'))
         reg = User(signupform.firstname.data, signupform.lastname.data,\
          signupform.username.data, signupform.password.data,\
          signupform.email.data)
@@ -82,6 +86,10 @@ def signin():
     if request.method == 'POST':
         em = signinform.email.data
         log = User.query.filter_by(email=em).first()
+        try:
+            log.password
+        except:
+            return redirect(url_for('signin'))
         if log.password == signinform.password.data:
             current_user = log.username
             session['current_user'] = current_user
