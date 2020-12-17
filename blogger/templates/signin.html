@@ -30,9 +30,16 @@
           </label>
         </div>
         {{ signinform.submit(class="btn btn-lg btn-primary btn-block")}}
-              <div class="noacc">
-        Don't have an account! <a href="signup">Sign Up Here</a>
-      </div>
+        <div class="noacc">
+        Don't have an account? <a href="signup">Sign Up Here</a>
+        </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            <h3 class="flashes" align="center" style="color:#337ab7">{{ message }}</h3>
+          {% endfor %}
+        {% endif %}
+        {% endwith %}
       </form>
 
 </div>

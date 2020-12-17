@@ -10,32 +10,34 @@
 
     <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
-    <title>Sign Up</title>
+    <title>Info Update</title>
 
     <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
     <script src="./Signin Template for Bootstrap_files/ie-emulation-modes-warning.js"></script>
+    <link href="/../../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/../../static/bootstrap/css/bootstrap-theme.min.css">
+    <script src="../../static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="static/css/styles.css">
 </head>
 <body>
 <div class="container">
     <form class="form-signin" action="" method="POST">
-        <h2 class="form-signin-heading">Please Sign Up</h2>
-        {{ signupform.firstname(id="inputEmail", class="form-control", autofocus="",placeholder="First Name")}}
-        {{ signupform.lastname(id="inputEmail", class="form-control", autofocus="",placeholder="Last Name")}}
-        {{ signupform.username(id="inputEmail", class="form-control", autofocus="",placeholder="User Name")}}
-        {{ signupform.email(placeholder="Email",id="inputEmail", class="form-control", autofocus="") }}
-        {{ signupform.password(placeholder="Password",id="inputPassword", class="form-control", required="") }}
-        {{ signupform.submit(class="btn btn-lg btn-primary btn-block")}}
+        <h2 class="form-signin-heading">Info Update (in order to leave the data unchanged, leave a gap)</h2>
+        {{ useredit.firstname(id="inputEmail", class="form-control", autofocus="",placeholder="First Name")}}
+        {{ useredit.lastname(id="inputEmail", class="form-control", autofocus="",placeholder="Last Name")}}
+        {{ useredit.password(placeholder="Password",id="inputPassword", class="form-control", required="") }}
+        {{ useredit.email(placeholder="Email",id="inputEmail", class="form-control", autofocus="") }}
+        {{ useredit.submit(class="btn btn-lg btn-primary btn-block")}}
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
             <h3 class="flashes" align="center" style="color:#337ab7">{{ message }}</h3>
             {% endfor %}
         {% endif %}
-        {% endwith %}
-        <div class="noacc">Already have an account? <a class="signup" href="/signin">Sign In Here</a></div>      
+        {% endwith %}  
     </form>
 
       

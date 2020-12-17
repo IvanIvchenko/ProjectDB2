@@ -1,7 +1,7 @@
 from flask import Flask, request, session, redirect, url_for, render_template, flash, jsonify
 
 from . models import User, Posts, db
-from . forms import AddPostForm, SignUpForm, SignInForm, AboutUserForm
+from . forms import AddPostForm, SignUpForm, SignInForm, AboutUserForm, UserEditForm
 
 from blogger import app
 
@@ -46,6 +46,31 @@ def delete_post(pid, post_owner):
     flash('You are not a valid user to Delete this Post')
     return redirect(url_for('show_posts'))
 
+@app.route('/edit_user/<updating_user>', methods=('GET', 'POST'))
+def edit_user(updating_user):
+    useredit = UserEditForm()
+    if session['current_user'] == updating_user:
+        if request.method == 'POST':
+            em = useredit.email.data 
+            findEmail = User.query.filter_by(email=em).first()
+            if findEmail:
+                flash('User with same email already exist')
+            else:
+                user = User.query.filter_by(username=updating_user).first()
+                print(useredit.data['firstname'])
+                if useredit is not None:
+                    if useredit.data['firstname']:
+                        user.firstname = useredit.firstname.data
+                    if useredit.data['lastname']:
+                        user.lastname = useredit.lastname.data
+                    if useredit.data['password']:
+                        user.password = useredit.password.data
+                    if useredit.data['email']:
+                        user.email = useredit.email.data
+                db.session.commit()
+                return redirect(url_for('about_user'))
+    return render_template('user_update.html', useredit=useredit)
+
 
 @app.route('/update/<pid>/<post_owner>', methods=('GET', 'POST'))
 def update_post(pid, post_owner):
@@ -70,13 +95,15 @@ def signup():
         em = signupform.email.data
         log = User.query.filter_by(email=em).first()
         if log is not None:
-            return redirect(url_for('signup'))
-        reg = User(signupform.firstname.data, signupform.lastname.data,\
-         signupform.username.data, signupform.password.data,\
-         signupform.email.data)
-        db.session.add(reg)
-        db.session.commit()
-        return redirect(url_for('index'))
+            #return redirect(url_for('signup'))
+            flash('User already exist')
+        else:
+            reg = User(signupform.firstname.data, signupform.lastname.data,\
+            signupform.username.data, signupform.password.data,\
+            signupform.email.data)
+            db.session.add(reg)
+            db.session.commit()
+            return redirect(url_for('index'))
     return render_template('signup.html', signupform=signupform)
 
 
@@ -89,7 +116,8 @@ def signin():
         try:
             log.password
         except:
-            return redirect(url_for('signin'))
+            #return redirect(url_for('signin'))
+            flash('Invalid email or password')
         if log.password == signinform.password.data:
             current_user = log.username
             session['current_user'] = current_user
@@ -98,9 +126,12 @@ def signin():
     return render_template('signin.html', signinform=signinform)
 
 
-@app.route('/about_user')
+@app.route('/about_user', methods=['GET', 'POST'])
 def about_user():
     aboutuserform = AboutUserForm()
+    if request.method == 'POST':
+        updating_user = session['current_user']
+        return redirect(url_for('edit_user', updating_user=updating_user))
     if session['user_available']:
         user = User.query.filter_by(username=session['current_user']).first()
         return render_template('about_user.html', user=user, aboutuserform=aboutuserform)
