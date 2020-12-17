@@ -4,11 +4,11 @@ from wtforms.fields.html5 import EmailField
 from wtforms.validators import Optional, DataRequired, Length, Email
 
 def password_length_check(form,field):
-    if len(field.data) > 6 or len(field.data)==0:
+    if len(field.data) < 6 or len(field.data)==0:
         raise ValidationError('Password should be longer than 6 characters')
 
 def name_length_check(form,field):
-    if len(field.data) > 6 or len(field.data)==0:
+    if len(field.data) < 2 or len(field.data)==0:
         raise ValidationError('Should be longer than 2 characters')
 
 def email_length_check(form,field):
